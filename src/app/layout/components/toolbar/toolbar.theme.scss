@@ -1,0 +1,16 @@
+@mixin toolbar-theme($theme) {
+
+    $foreground: map-get($theme, foreground);
+
+    toolbar {
+
+        .toolbar-separator {
+            background: map-get($foreground, divider);
+        }
+
+        .logout-button{
+            padding:0 10px 0 10px;
+            margin-right:20px;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+.product-list {
+  width: 100%;
+
+  .category {
+    color: rgba(0, 0, 0, 0.87);
+    margin-top: 20px;
+  }
+
+  .product-bg {
+    background-color: #0a78a3;
+    color: white;
+  }
+
+  .product,
+  .category,
+  .addition {
+    border: 1px solid gray;
+  }
+
+  .product h4 {
+    width: 100%;
+  }
+}
+
+.fxalign-right {
+  align-self: flex-end;
+}

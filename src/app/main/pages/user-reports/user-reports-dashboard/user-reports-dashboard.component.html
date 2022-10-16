@@ -1,0 +1,64 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+    <h2>User Report Management</h2>
+    <form class="mat-card p-24 mr-24" [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+      <div class="p-8" fxLayout="column" fxFlex="100">
+        <mat-form-field class="p-8">
+          <input matInput [matDatepicker]="picker1" placeholder="From date" formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="p-8">
+          <input matInput [matDatepicker]="picker2" placeholder="To date" formControlName="endDate">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+        <div class="submit-reports">
+          <button class="p-4 w-100 today-btn" mat-raised-button type="button" (click)="setTodayDate()">TODAY</button>
+          <button mat-raised-button class="p-4 w-100 btn btn-primary" color="primary" type="submit">APPLY</button>
+        </div>
+      </div>
+    </form>
+
+    <div>
+      <mat-card>User Access</mat-card>
+      <ngx-charts-bar-vertical
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="distributionInWeek"
+          [gradient]="gradient"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [legend]="showLegend"
+          (select)="onSelect($event)">
+        </ngx-charts-bar-vertical>
+      </div>
+
+  <div class="chart-spacing">
+  <mat-card>Distribution of Orders in the week</mat-card>
+  <ngx-charts-bar-horizontal
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="distributionInWeek"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      (select)="onSelect($event)">
+    </ngx-charts-bar-horizontal>
+  </div>
+
+  <div class="chart-spacing">
+  <mat-card>Distribution of Orders in the Day</mat-card>
+    <ngx-charts-bar-horizontal
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="distributionInDay"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      (select)="onSelect($event)">
+    </ngx-charts-bar-horizontal>
+  </div>
+  </div>

@@ -1,0 +1,93 @@
+<ngx-toasta></ngx-toasta>
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+  <div class="mat-card p-16 mr-24 mb-16" fusePerfectScrollbar>
+    <h2>Summary for today, {{now | date:'d MMMM y'}}</h2>
+    <div class="pl-24 summary">
+      <p class="left">Number of pending orders: <span class="right"> {{pendingOrders}}</span>
+      <p class="left">Number of orders with pick: <span class="right"> {{orderToBePicked}}</span></p>
+      <p class="left">Number of orders with delivery: <span class="right"> {{orderToBeDeliverd}}</span></p>
+    </div>
+  </div>
+  <h2>List of your Orders</h2>
+  <form class="mat-card p-24 mr-24" [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+    <div class="p-8" fxLayout="column" fxFlex="50">
+      <mat-form-field appearance="outline">
+        <mat-label>Order Status</mat-label>
+        <mat-select formControlName="status" >
+          <mat-option *ngFor="let status of orderStatus" [value]="status.value">
+              {{status.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix class="secondary-text">format_list_numbered</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Delivery Type</mat-label>
+        <mat-select formControlName="delivery" >
+          <mat-option *ngFor="let item of deliveryTypes" [value]="item.value">
+              {{item.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix class="secondary-text">directions_bike</mat-icon>
+      </mat-form-field>
+      <button mat-raised-button class="p-8 w-200 btn btn-primary" color="primary" type="submit">APPLY</button>
+    </div>
+    <div class="p-8" fxLayout="column" fxFlex="50">
+      <mat-form-field class="p-8">
+        <input matInput [matDatepicker]="picker1" placeholder="From date" formControlName="startDate">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="p-8">
+        <input matInput [matDatepicker]="picker2" placeholder="To date" formControlName="endDate">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+      <button class="p-4 w-100 today-btn" mat-raised-button type="button" (click)="setTodayDate()">TODAY</button>
+    </div>
+  </form>
+  <table mat-table [dataSource]="dataSource" matSort class="orders-table mat-card p-16 mr-24 mt-16">
+
+    <!-- scheduleDelivery Column -->
+    <ng-container matColumnDef="scheduleDelivery">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="header"> SCHEDULED DELIVERY </th>
+      <td mat-cell *matCellDef="let element"> {{ element.date | amDateFormat:'YYYY-MM-DD HH:mm' | amDifference:today:'seconds' : false | timeDiff}} </td>
+    </ng-container>
+
+    <!-- PAYMENT Column -->
+    <ng-container matColumnDef="payment">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="header"> PAYMENT </th>
+      <td mat-cell *matCellDef="let element"> {{element.paymentMethod}} </td>
+    </ng-container>
+
+    <!-- STATUS Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="header"> STATUS </th>
+      <td mat-cell *matCellDef="let element"> {{orderStatusObj[element.status]}} </td>
+    </ng-container>
+
+    <!-- USER Column -->
+    <ng-container matColumnDef="user">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="header"> USER </th>
+      <td mat-cell *matCellDef="let element"> {{element.customer.username}} </td>
+    </ng-container>
+    <!-- Actions Column -->
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="header">
+        Actions
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <span class="icon-spacing pointer">
+          <mat-icon class="s-32 edit" routerLink="/shop-management/orders/{{row.id}}">edit</mat-icon>
+        </span>
+        <span class="icon-spacing ml-12 pointer">
+          <mat-icon class="s-32 reject" (click)="deleteOrders()">cancel</mat-icon>
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" [length]="dataLength"></mat-paginator>
+</div>

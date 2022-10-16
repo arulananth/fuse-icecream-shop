@@ -1,0 +1,51 @@
+<ngx-toasta></ngx-toasta>
+<div class="page-layout blank p-24 category-mgmt" fusePerfectScrollbar>
+  <mat-card>Product Management - Categories</mat-card>
+  <form class="category-form" name="categoryForm" [formGroup]="categoryForm" style="margin:30px 30px">
+      <mat-form-field class="category-full-width">
+        <input matInput placeholder="Category Name" formControlName="name">
+        <mat-error *ngIf="categoryForm.get('name').hasError('required')">
+          name is required
+        </mat-error>
+      </mat-form-field>
+      <button (click)="fileInput.click()" class="mat-raised-button mat-primary file">Upload Image</button>
+      <span style="visibility: hidden; position: absolute; overflow: hidden; width: 0px; height:0px;border:none;margin:0; padding:0">
+           <input type="file" #fileInput ng2FileSelect [uploader]="uploader" formControlName="imageFile"/>
+      </span>
+      <button class="mat-raised-button mat-accent category-submit" [disabled]="categoryForm.invalid" (click)="submit()">Apply</button>
+  </form>
+  
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 category-list">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+     <!-- Id Column -->
+     <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>
+        Actions
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <span class="icon-spacing">
+          <mat-icon class="s-32 edit" (click)="editCategory(row)">edit</mat-icon>
+        </span>
+        <span class="icon-spacing">
+          <mat-icon class="s-32 reject" (click)="deleteCategory(row)">cancel</mat-icon>
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator #categoryPaginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+</div>

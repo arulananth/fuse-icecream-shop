@@ -1,0 +1,300 @@
+<ngx-toasta></ngx-toasta>
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+  <h2>Products Management
+    <div style="float:right;" (click)="addNew()">New<span>
+        <mat-icon class="s-32 mat-icon">add_circle_outline</mat-icon>
+      </span>
+    </div>
+  </h2>
+
+  <!-- Product table -->
+  <div *ngIf="products.length!=0 && optionSelected == 0">
+    <table mat-table [dataSource]="dataSourceProducts" matSort class="mat-elevation-z8 product-list ">
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Image Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <span class="icon-spacing">
+            <mat-icon class="s-32 edit" (click)="editProduct(row)">edit</mat-icon>
+          </span>
+          <span class="icon-spacing">
+            <mat-icon class="s-32 reject" (click)="deleteProduct(row)">cancel</mat-icon>
+          </span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator #productsPaginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+  <!-- Options table -->
+  <div *ngIf="options.length != 0 && this.optionSelected == 1">
+    <table mat-table [dataSource]="dataSourceOptions" matSort class="mat-elevation-z8">
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Options Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Image Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <span class="icon-spacing">
+            <mat-icon class="s-32 edit" (click)="editOption(row)">edit</mat-icon>
+          </span>
+          <span class="icon-spacing">
+            <mat-icon class="s-32 reject" (click)="deleteOptions(row)">cancel</mat-icon>
+          </span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator #optionsPaginator  [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+  <!-- Additions table -->
+  <div *ngIf="additions.length !=0 && this.optionSelected == 2">
+    <table mat-table [dataSource]="dataSourceAdditions" matSort class="mat-elevation-z8">
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Additions </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <span class="icon-spacing">
+            <mat-icon class="s-32 edit" (click)="editAddition(row)">edit</mat-icon>
+          </span>
+          <span class="icon-spacing">
+            <mat-icon class="s-32 reject" (click)="deleteAdditions(row)">cancel</mat-icon>
+          </span>
+        </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator #additionsPaginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+
+  <mat-tab-group #tabGroup (selectedTabChange)="tabChanged($event)">
+    <mat-tab label="Product">
+      <form class="product-form" name="productForm" [formGroup]="productForm" style="margin:30px 30px">
+        <div class="product-container">
+          <mat-form-field>
+            <mat-select placeholder="Product Category" formControlName="productCategory">
+              <mat-option *ngFor="let pc of productCategories" [value]="pc.id">
+                {{pc.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="productForm.get('productCategory').hasError('required')">
+              Category is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Product Name" formControlName="name">
+            <mat-error *ngIf="productForm.get('name').hasError('required')">
+              Product Name is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Description" formControlName="description"></textarea>
+            <mat-error *ngIf="productForm.get('description').hasError('required')">
+              Description is required
+            </mat-error>
+          </mat-form-field>
+          <div class="image-upload">
+            <label>Image (Max 512kb)</label>
+            <button (click)="fileInput.click()" class="mat-raised-button mat-primary file">Browse file</button>
+            <button (click)="uploadImage(selectedProductId)" class="mat-raised-button mat-primary file">Upload Image</button>
+            <span style="visibility: hidden;position: absolute; overflow: hidden; width: 0px; height:0px;border:none;margin:0; padding:0">
+              <input type="file" #fileInput ng2FileSelect [uploader]="uploader" />
+            </span>
+          </div>
+          <mat-form-field>
+            <input matInput placeholder="Number of options" formControlName="numOptions">
+            <mat-error *ngIf="productForm.get('numOptions').hasError('required')">
+               Number of options is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Maximum number of options" formControlName="maxOptions">
+            <mat-error *ngIf="productForm.get('maxOptions').hasError('required')">
+               Maximum Number of options is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Cost(€)" formControlName="cost">
+            <mat-error *ngIf="productForm.get('cost').hasError('required')">
+              Cost is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Base Cost(€/Unit)" formControlName="costPerUnit">
+            <mat-error *ngIf="productForm.get('costPerUnit').hasError('required')">
+              Base Cost is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Reference Unit" formControlName="unitType">
+              <mat-option *ngFor="let referenceUnit of referenceUnits" [value]="referenceUnit.value">
+                {{referenceUnit.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="productForm.get('unitType').hasError('required')">
+              Reference Unit is required
+            </mat-error>
+          </mat-form-field>
+          <div class="range">
+            <label>Range of Units Allowed</label>
+            <mat-form-field>
+              <input matInput placeholder="min" formControlName="min">
+              <mat-error *ngIf="productForm.get('min').hasError('required')">
+                Minimum Unit is required
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="max" formControlName="max">
+              <mat-error *ngIf="productForm.get('max').hasError('required')">
+                Maximum Unit is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="submit-wrapper">
+          <button (click)="saveOrUpdateProduct()" class="mat-raised-button mat-accent">Save</button>
+        </div>
+      </form>
+    </mat-tab>
+    <mat-tab label="Options">
+
+      <form class="options-form" name="optionsForm" [formGroup]="optionsForm" style="margin:30px 30px">
+        <div class="options-container">
+          <mat-form-field>
+            <input matInput placeholder="Name" formControlName="name">
+            <mat-error *ngIf="optionsForm.get('name').hasError('required')">
+              Name is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Description" formControlName="description"></textarea>
+            <mat-error *ngIf="optionsForm.get('description').hasError('required')">
+              Description is required
+            </mat-error>
+          </mat-form-field>
+          <div class="image-upload">
+            <label>Image (Max 512kb)</label>
+            <button (click)="fileInput.click()" class="mat-raised-button mat-primary file">Browse file</button>
+            <span style="visibility: hidden; position: absolute; overflow: hidden; width: 0px; height:0px;border:none;margin:0; padding:0">
+              <input type="file" #fileInput ng2FileSelect [uploader]="uploader" />
+            </span>
+          </div>
+          <mat-form-field>
+            <input matInput placeholder="Cost(€)" formControlName="cost">
+            <mat-error *ngIf="optionsForm.get('cost').hasError('required')">
+              Cost is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Base Cost(€/Unit)" formControlName="costPerUnit">
+            <mat-error *ngIf="optionsForm.get('costPerUnit').hasError('required')">
+              Base Cost is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select placeholder="Reference Unit" formControlName="unitType">
+              <mat-option *ngFor="let referenceUnit of optionsReferenceUnits" [value]="referenceUnit.name">
+                {{referenceUnit.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="optionsForm.get('unitType').hasError('required')">
+              Reference Unit is required
+            </mat-error>
+          </mat-form-field>
+          <div class="submit-wrapper">
+            <button (click)="saveOrUpdateOption()" class="mat-raised-button mat-accent">Save</button>
+          </div>
+        </div>
+      </form>
+    </mat-tab>
+    <mat-tab label="Additions">
+      <form class="additions-form" name="additionsForm" [formGroup]="additionsForm" style="margin:30px 30px">
+        <div class="additions-container">
+          <mat-form-field>
+            <input matInput placeholder="Name" formControlName="name">
+            <mat-error *ngIf="additionsForm.get('name').hasError('required')">
+              Name is required
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <textarea matInput placeholder="Description" formControlName="description"></textarea>
+            <mat-error *ngIf="additionsForm.get('description').hasError('required')">
+              Description is required
+            </mat-error>
+          </mat-form-field>
+          <div class="image-upload">
+            <label>Image (Max 512kb)</label>
+            <button (click)="fileInput.click()" class="mat-raised-button mat-primary file">Browse file</button>
+            <span style="visibility: hidden; position: absolute; overflow: hidden; width: 0px; height:0px;border:none;margin:0; padding:0">
+              <input type="file" #fileInput ng2FileSelect [uploader]="uploader" />
+            </span>
+          </div>
+          <mat-form-field>
+            <input matInput placeholder="Cost(€)" formControlName="cost">
+            <mat-error *ngIf="additionsForm.get('cost').hasError('required')">
+              Cost is required
+            </mat-error>
+          </mat-form-field>
+          <div class="submit-wrapper">
+            <button (click)="saveOrUpdateAddition()" class="mat-raised-button mat-accent">Save</button>
+          </div>
+        </div>
+      </form>
+    </mat-tab>
+  </mat-tab-group>
+  

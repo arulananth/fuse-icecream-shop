@@ -1,0 +1,106 @@
+table.mat-table{
+    width: 100%;
+}
+
+.product-form {
+    width: 95%;
+}
+
+.product-full-width {
+    width: 100%;
+}
+
+.product-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-container>* {
+    width: 100%;
+}
+
+.file {
+    margin: 20px 0;
+}
+
+.edit {
+    color: green;
+}
+
+.icon-spacing {
+    margin: 0 10px;
+}
+
+.reject {
+    color: maroon;
+}
+
+.product-submit {
+    float: right;
+    margin-top: 15%;
+    margin-bottom: 20px;
+}
+
+
+.submit-wrapper {
+    text-align: center;
+}
+
+.submit-wrapper>button {
+    width: 100%
+}
+
+.options-container div.submit-wrapper,
+.additions-container div.submit-wrapper {
+    margin-top: 30px;
+}
+
+mat-tab-group {
+    margin-top: 50px;
+    background-color: white;
+}
+
+@import "src/@fuse/scss/fuse";
+
+.product-container {
+    margin-bottom: 20px;
+
+    .mat-form-field-type-mat-select {
+        margin-top: 20px;
+    }
+
+    .image-upload>button {
+        margin-left: 20px;
+    }
+
+    .range>mat-form-field {
+        padding: 10px;
+    }
+
+
+}
+
+
+.options-container {
+    margin-bottom: 20px;
+
+    mat-form-field {
+        display: block;
+    }
+
+    .image-upload>button {
+        margin-left: 20px;
+    }
+}
+
+.additions-container {
+    margin-bottom: 20px;
+
+    mat-form-field {
+        display: block;
+    }
+
+    .image-upload>button {
+        margin-left: 20px;
+    }
+}

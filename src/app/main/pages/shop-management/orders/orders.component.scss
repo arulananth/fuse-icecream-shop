@@ -1,0 +1,40 @@
+.today-btn {
+  align-self: flex-end;
+}
+
+.summary {
+  width: 100%;
+  max-width: 300px;
+  .right {
+    float: right;
+    font-weight: bolder;
+  }
+}
+
+.orders-table {
+  width: 100%;
+
+  .header {
+    font-size: 15px;
+    font-weight: 1000;
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+
+  .mat-column-scheduleDelivery {
+    width: 30%;
+  }
+
+  .mat-column-payment {
+    width: 20%;
+  }
+
+  .mat-column-status,
+  .mat-column-user,
+  .mat-column-actions {
+    width: 16%;
+  }
+}
+
